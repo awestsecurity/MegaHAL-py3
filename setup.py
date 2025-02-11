@@ -11,7 +11,7 @@ def main():
           url='http://gruntle.org/projects/python/megahal/',
           description='Python implementation of megahal markov bot',
           license='BSD',
-          version='0.2',
+          version='0.2.2',
           py_modules=['megahal'],
           scripts=['scripts/megahal'],
 
