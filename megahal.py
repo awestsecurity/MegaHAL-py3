@@ -431,7 +431,7 @@ class MegaHAL(object):
 
     def train(self, file):
         """Train the brain with textfile, each line is a phrase"""
-        with open(file, 'r') as fp:
+        with open(file, 'r', encoding='utf-8') as fp:
             for line in fp:
                 line = line.strip()
                 if line and not line.startswith("#"):
