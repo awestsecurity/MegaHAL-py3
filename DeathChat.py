@@ -9,7 +9,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 whosline = 0
 speaking = 0
-convolength = 10
+convolength = 12
 convostep = 0
 speaker = ""
 
@@ -42,11 +42,11 @@ def SwitchAudioChannel(channelid):
     if mono:
         return false
     if channelid == 0:
-        volume.SetChannelVolumeLevel(0, -22, None) # Left
-        volume.SetChannelVolumeLevel(1, avoidspeakerblowout, None) # Right
+        volume.SetChannelVolumeLevel(0, -65.0, None) # Left
+        volume.SetChannelVolumeLevel(1, maxvolume, None) # Right
     else:
-        volume.SetChannelVolumeLevel(0, avoidspeakerblowout, None) # Left
-        volume.SetChannelVolumeLevel(1, -22, None) # Right
+        volume.SetChannelVolumeLevel(0, maxvolume, None) # Left
+        volume.SetChannelVolumeLevel(1, -65.0, None) # Right
 
 engine = pyttsx3.init()
 engine.connect('finished-utterance', onEnd)
@@ -105,4 +105,6 @@ def saveAndQuit():
   
 SetupAudio()
 converse()  
+volume.SetChannelVolumeLevel(0, maxvolume, None) # Left
+volume.SetChannelVolumeLevel(1, maxvolume, None) # Right
         
