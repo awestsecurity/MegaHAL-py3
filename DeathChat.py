@@ -9,7 +9,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 whosline = 0
 speaking = 0
-convolength = 2
+convolength = 10
 convostep = 0
 speaker = ""
 
