@@ -85,7 +85,6 @@ def parseSysArgs():
     global countTime
     global endTime
     global timeStart
-    #print(sys.argv)
     if len(sys.argv) == 1:
         return
     if len(sys.argv) == 3:
@@ -114,7 +113,6 @@ def converse():
         currentTime = time.time() - timeStart
         while (currentTime < endTime):
             currentTime = time.time() - timeStart
-            print(currentTime)
             if (whosline == 0):
                 currentline = leander.get_reply(currentline)
                 print ("Leander: "+currentline) 
