@@ -1,3 +1,5 @@
+import sys
+import time
 # For chatbot functions - install megahal
 from megahal import *
 # For text to speach - install pyttsx3
@@ -7,11 +9,15 @@ from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
+#set from command line argument
+convolength = 20
+
+#tracking variables
 whosline = 0
 speaking = 0
-convolength = 20
 convostep = 0
-speaker = ""
+countTime = False
+endTime = 5
 
 #for left/right channel control
 volume = None
@@ -73,27 +79,66 @@ def sayWithFemaleVoice(line):
     engine.say(line)
     engine.runAndWait()
 
+# take the arguement for conversation length if given. sys.argv[0] is the python file name
+def parseSysArgs():
+    global convolength
+    global countTime
+    global endTime
+    global timeStart
+    #print(sys.argv)
+    if len(sys.argv) == 1:
+        return
+    if len(sys.argv) == 3:
+        if sys.argv[1] == '-l':
+            convolength = int(sys.argv[2])
+            print(f"setting conversation length to {convolength} lines.")
+        elif sys.argv[1] == '-t':
+            countTime = True
+            endTime = int(sys.argv[2])
+            print(f"setting conversation length to {endTime} seconds.")
+
 #The main loop
 def converse():
     global convostep
     global convolength
     global whosline
+    global countTime
+    global endTime
+    #Begin conversation
     currentline = "Hello, I'd like to talk to you about death."
     sayWithFemaleVoice(currentline)
     print (currentline)
-    while (convostep <= convolength):
-        speaker = "Jannlee: " if whosline == 0 else "Chromise: "
-        convostep += 1
-        if (whosline == 0):
-            currentline = leander.get_reply(currentline)
-            print ("Leander: "+currentline) 
-            sayWithMaleVoice(currentline)
-            whosline = 1
-        else: 
-            currentline = chromis.get_reply(currentline)
-            print ("Chromise: "+currentline) 
-            sayWithFemaleVoice(currentline)
-            whosline = 0
+    #Use time to determine length of conversation
+    if(countTime):
+        timeStart = time.time()
+        currentTime = time.time() - timeStart
+        while (currentTime < endTime):
+            currentTime = time.time() - timeStart
+            print(currentTime)
+            if (whosline == 0):
+                currentline = leander.get_reply(currentline)
+                print ("Leander: "+currentline) 
+                sayWithMaleVoice(currentline)
+                whosline = 1
+            else: 
+                currentline = chromis.get_reply(currentline)
+                print ("Chromis: "+currentline) 
+                sayWithFemaleVoice(currentline)
+                whosline = 0
+    #Use number of lines to determine length of conversation (DEFAULT)
+    else:
+        while (convostep < convolength):
+            convostep += 1
+            if (whosline == 0):
+                currentline = leander.get_reply(currentline)
+                print ("Leander: "+currentline) 
+                sayWithMaleVoice(currentline)
+                whosline = 1
+            else: 
+                currentline = chromis.get_reply(currentline)
+                print ("Chromis: "+currentline) 
+                sayWithFemaleVoice(currentline)
+                whosline = 0
     print("Conversation has concluded.")
     saveAndQuit()
     
@@ -104,6 +149,7 @@ def saveAndQuit():
     chromis.close()
   
 SetupAudio()
+parseSysArgs()
 converse()  
 volume.SetChannelVolumeLevel(0, maxvolume, None) # Left
 volume.SetChannelVolumeLevel(1, maxvolume, None) # Right
