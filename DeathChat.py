@@ -60,8 +60,8 @@ voices = engine.getProperty('voices')
 
 leander = MegaHAL(None,'leander.brn',None)
 chromis = MegaHAL(None,'chromis.brn',None)
-leander.train('DeathTraining.trn')
-chromis.train('DeathTraining.trn')
+leander.train('brain-leander.trn')
+chromis.train('brain-chromis.trn')
 
 def sayWithMaleVoice(line):
     engine.setProperty('rate', 115)
